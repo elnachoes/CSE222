@@ -109,3 +109,22 @@ int delete(myNode* list, int number)
     }
 }
 
+int search(myNode* list, int number)
+{
+    myNode* currentNode = list->nextNode;
+
+    while (true)
+    {
+        if (currentNode->data == number)
+        {
+            return 1;
+        }
+        else if (currentNode->nextNode == NULL)
+        {
+            return 0;
+        }
+        currentNode = currentNode->nextNode;
+    }
+    return 0;
+}
+

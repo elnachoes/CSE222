@@ -17,10 +17,11 @@ void main()
 
     print(myList);
 
-    if (!delete(myList,8))
+    if (search(myList, 190))
     {
-        printf("8 does not exist in the list\n");
+        printf("is in list\n");
     }
+
 
 
     return;

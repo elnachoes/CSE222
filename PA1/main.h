@@ -11,5 +11,6 @@ typedef struct myNode
 myNode* init();
 int add(myNode* list, int number);
 int delete(myNode* list, int number);
+int search(myNode* list, int number);
 void print(myNode* list);
 void cleanup(myNode* list);
