@@ -17,12 +17,14 @@ void main()
 
     print(myList);
 
-    if (search(myList, 190))
+    if (search(myList, 191))
     {
         printf("is in list\n");
     }
 
+    // free(myList);
 
+    cleanup(myList);
 
     return;
 }

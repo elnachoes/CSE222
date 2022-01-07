@@ -123,8 +123,30 @@ int search(myNode* list, int number)
         {
             return 0;
         }
-        currentNode = currentNode->nextNode;
+        else
+        {
+            currentNode = currentNode->nextNode;
+        }
     }
     return 0;
 }
 
+void cleanup(myNode* list)
+{
+    myNode* currentNode = list;
+    myNode* nextNode = NULL;
+    while (true)
+    {
+        if (currentNode->nextNode == NULL)
+        {
+            free(currentNode);
+            return;
+        }
+        else
+        {
+            myNode* nextNode = currentNode->nextNode;
+            free(currentNode);
+            currentNode = nextNode;
+        }
+    }
+}
