@@ -83,3 +83,29 @@ void print(myNode* list)
         }
     }
 }
+
+int delete(myNode* list, int number)
+{
+    myNode* previousNode = list;
+    myNode* currentNode = list->nextNode;
+
+    while (true)
+    {
+        if (currentNode->data == number)
+        {
+            previousNode->nextNode = currentNode->nextNode;
+            free(currentNode);
+            return 1;
+        }
+        else if (currentNode->nextNode == NULL)
+        {
+            return 0;
+        }
+        else
+        {
+            previousNode = currentNode;
+            currentNode = currentNode->nextNode;
+        }
+    }
+}
+
