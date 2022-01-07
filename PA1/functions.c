@@ -4,35 +4,65 @@
 //auto sets the data of the sentinal node to be : 1234567
 myNode *InitNode()
 {
-	myNode* sentinalNode = (myNode*)malloc(sizeof(myNode));
-	sentinalNode->nextNode = NULL;
-	sentinalNode->data = 1234567; // set to 1234567 due to instruction
-	return sentinalNode;
+    myNode* sentinalNode = (myNode*)malloc(sizeof(myNode));
+    sentinalNode->nextNode = NULL;
+    sentinalNode->data = 1234567; // set to 1234567 due to instruction
+    return sentinalNode;
 }
 
 int add(myNode* list, int number)
 {
+    //creating a pointer to a new myNode and setting its data equal to the int input
+    myNode* newNode = (myNode*)malloc(sizeof(myNode));
+    newNode->data = number;
+    newNode->nextNode = NULL;
 
-	myNode* newNode = (myNode*)malloc(sizeof(myNode));
-	newNode->data = number;
 
-	//null ptr check
-	if (newNode == NULL)
-		return 0;
+    //null ptr check
+    if (newNode == NULL)
+        return 0;
 
-	myNode* previousNode = NULL;
-	myNode* currentNode = list->nextNode;
+    //I start stepping through the linked list with the sentinal as the previous and it's next node as the current node
+    myNode* previousNode = list;
+    myNode* currentNode = list->nextNode;
 
-	if (currentNode->nextNode == NULL)
-	{
-		currentNode->nextNode = newNode;
-		return 1;
-	}
+    //edge case for if you put in your first myNode and the sentinal's next node is null just stick it in front of the sentinal
+    if (currentNode == NULL)
+    {
+        previousNode->nextNode = newNode;
+        return 1;
+    }
 
-	while (true)
-	{
-
-	}
-
-	return 1;
+    while (true)
+    {
+        //if the next node is null its at the end of the list and should either be put in front or behind the last node
+        if (currentNode->nextNode == NULL)
+        {
+            if (currentNode->data >= newNode->data)
+            {
+                previousNode->nextNode = newNode;
+                newNode->nextNode = currentNode;
+            }
+            else
+            {
+                currentNode->nextNode = newNode;
+            }
+            break;
+        }
+        //if the value for newNode-> is in between currentNode and Previous node slot newNode in between the previous node and the current node
+        else if(currentNode->data >= newNode->data && previousNode->data <= newNode->data)
+        {
+            previousNode->nextNode = newNode;
+            newNode->nextNode = currentNode;
+            break;
+        }
+        //if neither of those conditions are met set the previous node to the current one and the current one to currentNode->nextNode
+        else
+        {
+            previousNode = currentNode;
+            currentNode = currentNode->nextNode;
+        }
+    }
+    
+    return 1;
 }

@@ -1,30 +1,37 @@
-#include <stdio.h>
+//Author : Corbin Martin
+//TODO : ^^^^^^ fill the rest of this in later ^^^^^^
+
+
 #include "main.h"
 
 void TestPrint(myNode* list)
 {
-	myNode* currentNode = list;
+    myNode* currentNode = list->nextNode;
 
-	while (currentNode->nextNode != NULL)
-	{
-		printf("%d\n", currentNode->data);
-		currentNode = currentNode->nextNode;
-	}
+    while (true)
+    {
+        printf("%d\n", currentNode->data);
+        currentNode = currentNode->nextNode;
+
+        if (currentNode->nextNode == NULL)
+        {
+            printf("%d\n", currentNode->data);
+            break;
+        }
+    }
 }
 
 void main()
 {
-	myNode* myList = InitNode();
+    myNode* myList = InitNode();
 
-	add(myList, 5);
+    add(myList, 98);
+    add(myList, 2);
+    add(myList, 7);
+    add(myList, 190);
+    add(myList, 5);
 
-	printf("%d", myList->data);
+    TestPrint(myList);
 
-	// TestPrint(linkedList);
-
-	// printf("asdf");
-
-	// printf("%d", linkedList->data);
-
-	return;
+    return;
 }
