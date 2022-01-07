@@ -2,7 +2,7 @@
 
 //returns a ptr to a sentinal node
 //auto sets the data of the sentinal node to be : 1234567
-myNode *InitNode()
+myNode *init()
 {
     myNode* sentinalNode = (myNode*)malloc(sizeof(myNode));
     sentinalNode->nextNode = NULL;
@@ -63,6 +63,23 @@ int add(myNode* list, int number)
             currentNode = currentNode->nextNode;
         }
     }
-    
+
     return 1;
+}
+
+void print(myNode* list)
+{
+    myNode* currentNode = list->nextNode;
+
+    while (true)
+    {
+        printf("%d\n", currentNode->data);
+        currentNode = currentNode->nextNode;
+
+        if (currentNode->nextNode == NULL)
+        {
+            printf("%d\n", currentNode->data);
+            break;
+        }
+    }
 }

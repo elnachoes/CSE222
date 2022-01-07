@@ -8,7 +8,7 @@ typedef struct myNode
 	struct myNode* nextNode;
 } myNode;
 
-myNode* InitNode();
+myNode* init();
 int add(myNode* list, int number);
 int delete(myNode* list, int number);
 void print(myNode* list);
