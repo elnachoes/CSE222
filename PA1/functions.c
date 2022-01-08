@@ -1,7 +1,9 @@
+//Author : Corbin Martin
+//Program Description : this is a collection of functions for manipulating a linked list
+
 #include "main.h"
 
-//returns a ptr to a sentinal node
-//auto sets the data of the sentinal node to be : 1234567
+// this function returns a ptr to a sentinal node
 myNode *init()
 {
     myNode* sentinalNode = (myNode*)malloc(sizeof(myNode));
@@ -10,6 +12,9 @@ myNode *init()
     return sentinalNode;
 }
 
+//this function adds a new element to the linked list
+//automatically places the number in order of the other elment's data values
+//returns a 1 or a 0 depending on if the item was added to the list
 int add(myNode* list, int number)
 {
     //creating a pointer to a new myNode and setting its data equal to the int input
@@ -67,23 +72,34 @@ int add(myNode* list, int number)
     return 1;
 }
 
+//this function prints all the elements in the linked list
 void print(myNode* list)
 {
     myNode* currentNode = list->nextNode;
 
+    if (currentNode == NULL)
+    {
+        return;
+    }
+
     while (true)
     {
-        printf("%d\n", currentNode->data);
-        currentNode = currentNode->nextNode;
+        printf("%d ", currentNode->data);
 
         if (currentNode->nextNode == NULL)
         {
-            printf("%d\n", currentNode->data);
-            break;
+            printf("\n");
+            return;
+        }
+        else
+        {
+            currentNode = currentNode->nextNode;
         }
     }
 }
 
+//this function removes a specific item from the list
+//returns a 1 or a 0 depending on weather the item was actually deleted from the list
 int delete(myNode* list, int number)
 {
     myNode* previousNode = list;
@@ -109,9 +125,15 @@ int delete(myNode* list, int number)
     }
 }
 
+//this function returns a 1 or a 0 if a number exists in the list
 int search(myNode* list, int number)
 {
     myNode* currentNode = list->nextNode;
+
+    if (currentNode == NULL)
+    {
+        return 0;
+    }
 
     while (true)
     {
@@ -131,6 +153,7 @@ int search(myNode* list, int number)
     return 0;
 }
 
+//this free's all the memory allocated by the linked list
 void cleanup(myNode* list)
 {
     myNode* currentNode = list;
