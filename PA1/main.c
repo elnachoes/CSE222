@@ -59,11 +59,11 @@ void main()
             {
                 if (search(myList,userInputNumber))
                 {
-                    printf("NOT FOUND\n");
+                    printf("FOUND\n");
                 }
                 else
                 {
-                    printf("FOUND\n");
+                    printf("NOT FOUND\n");
                 }
             }
             else if (userInputOperation == 'd')
