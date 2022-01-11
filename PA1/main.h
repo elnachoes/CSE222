@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+//how buffer space for user input
 #define INPUT_BUFFER 1024
 
-#define BEGIN_CMD_LINE "</> "
+//the arbitrary magic number to set the sentinel node's data to because of the assignment
+#define SENTINEL_DATA 1234567
 
-//I made a macro just for this message for the sake of being a little bit cleaner
-#define ERROR_MESSAGE \
+//I made a macro just for this message for the sake of being a little bit cleaner just because it is so big
+#define ERROR_MESSAGE_UDEFINED \
 "Please enter one of the following comands:\n\
 i number    insert number into the list\n\
 p           print the list in order\n\

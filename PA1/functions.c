@@ -3,13 +3,16 @@
 
 #include "main.h"
 
-// this function returns a ptr to a sentinal node
+//this function returns a ptr to a sentinel node
+//dynamically allocates the space for the sentinel node and also sets it's next node to NULL
 myNode *init()
 {
-    myNode* sentinalNode = (myNode*)malloc(sizeof(myNode));
-    sentinalNode->nextNode = NULL;
-    sentinalNode->data = 1234567; // set to 1234567 due to instruction
-    return sentinalNode;
+    myNode* sentinelNode = (myNode*)malloc(sizeof(myNode));
+    sentinelNode->nextNode = NULL;
+
+    //set to the magic number 1234567 due to the assignment instruction
+    sentinelNode->data = SENTINEL_DATA;
+    return sentinelNode;
 }
 
 //this function adds a new element to the linked list
@@ -22,10 +25,8 @@ int add(myNode* list, int number)
     newNode->data = number;
     newNode->nextNode = NULL;
 
-
     //null ptr check
-    if (newNode == NULL)
-        return 0;
+    if (newNode == NULL) return 0;
 
     //I start stepping through the linked list with the sentinal as the previous and it's next node as the current node
     myNode* previousNode = list;
@@ -54,6 +55,7 @@ int add(myNode* list, int number)
             }
             break;
         }
+
         //if the value for newNode-> is in between currentNode and Previous node slot newNode in between the previous node and the current node
         else if(currentNode->data >= newNode->data && previousNode->data <= newNode->data)
         {
@@ -61,6 +63,7 @@ int add(myNode* list, int number)
             newNode->nextNode = currentNode;
             break;
         }
+
         //if neither of those conditions are met set the previous node to the current one and the current one to currentNode->nextNode
         else
         {
@@ -72,25 +75,26 @@ int add(myNode* list, int number)
     return 1;
 }
 
-//this function prints all the elements in the linked list
+//this function prints all the data of the elements in the linked list to standard out by walking the whole list
 void print(myNode* list)
 {
     myNode* currentNode = list->nextNode;
 
-    if (currentNode == NULL)
-    {
-        return;
-    }
+    //null ptr check
+    if (currentNode == NULL) return;
 
     while (true)
     {
         printf("%d ", currentNode->data);
 
+        //if the next node is null print a new line and exit
         if (currentNode->nextNode == NULL)
         {
             printf("\n");
             return;
         }
+
+        //walk to the next node in the list
         else
         {
             currentNode = currentNode->nextNode;
@@ -107,16 +111,22 @@ int delete(myNode* list, int number)
 
     while (true)
     {
+        //if the data matches the one that should be removed
+        //connect the previous node's next node to the current node's next node, free the current node, and return 1 for a success
         if (currentNode->data == number)
         {
             previousNode->nextNode = currentNode->nextNode;
             free(currentNode);
             return 1;
         }
+
+        //if the node isn't found in the whole list return a 0 for a fail
         else if (currentNode->nextNode == NULL)
         {
             return 0;
         }
+
+        //walk to the next node in the list
         else
         {
             previousNode = currentNode;
@@ -130,27 +140,29 @@ int search(myNode* list, int number)
 {
     myNode* currentNode = list->nextNode;
 
-    if (currentNode == NULL)
-    {
-        return 0;
-    }
+    //null ptr check
+    if (currentNode == NULL) return 0;
 
     while (true)
     {
+        //if the data matches that of the number the node exists in the list and return a 1 for a success
         if (currentNode->data == number)
         {
             return 1;
         }
+
+        //if the node isn't found in the whole list return a 0 for a fail
         else if (currentNode->nextNode == NULL)
         {
             return 0;
         }
+
+        //walk to the next node in the list
         else
         {
             currentNode = currentNode->nextNode;
         }
     }
-    return 0;
 }
 
 //this free's all the memory allocated by the linked list
@@ -158,13 +170,18 @@ void cleanup(myNode* list)
 {
     myNode* currentNode = list;
     myNode* nextNode = NULL;
+
     while (true)
     {
+        //when your at the end of the list free the last node and exit
         if (currentNode->nextNode == NULL)
         {
             free(currentNode);
             return;
         }
+
+        //set the nextNode first because we will free the current node after
+        //once the current node is freed set the current node to the next node
         else
         {
             myNode* nextNode = currentNode->nextNode;

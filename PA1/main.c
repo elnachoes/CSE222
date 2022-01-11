@@ -17,24 +17,28 @@ void main()
 
     while (true)
     {
-        printf("</> ");
+        //
+        printf("> ");
         fgets(userInputBuffer, INPUT_BUFFER, stdin);
         parseResult = sscanf(userInputBuffer, "%c%d%s",&userInputOperation, &userInputNumber,invalidInputBuffer);
 
+        // if there is only 1 argument for the opperation it is either printing the list or exiting the program
         if (parseResult == 1)
         {
             if (userInputOperation == 'p')
             {
                 print(myList);
             }
+            
             else if (userInputOperation == 'x')
             {
-                cleanup(myList);
                 break;
             }
+
             else
             {
-                printf(ERROR_MESSAGE);
+                //error message defined in main.h because it is quite large
+                printf(ERROR_MESSAGE_UDEFINED);
             }
         }
 
@@ -42,9 +46,12 @@ void main()
         {
             if (userInputOperation == 'i')
             {
+                //this adds an item to the list if it IS NOT already in the list by searching the list
                 if (!search(myList,userInputNumber))
                 {
                     int result = add(myList, userInputNumber);
+
+                    //if add returns 0 it cannot allocate enough memory on the heap so throw this error
                     if (result = 0)
                     {
                         printf("OUT OF MEMORY\n");
@@ -55,6 +62,7 @@ void main()
                     printf("NODE ALREADY IN LIST\n");
                 }
             }
+
             else if (userInputOperation == 's')
             {
                 if (search(myList,userInputNumber))
@@ -66,6 +74,7 @@ void main()
                     printf("NOT FOUND\n");
                 }
             }
+
             else if (userInputOperation == 'd')
             {
                 if (search(myList,userInputNumber))
@@ -78,17 +87,21 @@ void main()
                     printf("NODE NOT FOUND\n");
                 }
             }
+
             else
             {
-                printf(ERROR_MESSAGE);
+                //error message defined in main.h because it is quite large
+                printf(ERROR_MESSAGE_UDEFINED);
             }
         }
 
         if (parseResult >= 3)
         {
-            printf(ERROR_MESSAGE);
+            //error message defined in main.h because it is quite large
+            printf(ERROR_MESSAGE_UDEFINED);
         }
     }
 
+    cleanup(myList);
     return;
 }
