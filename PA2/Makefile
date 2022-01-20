@@ -11,4 +11,4 @@ functions.o : functions.c main.h
 	gcc -c functions.c
 
 clean :
-	rm functions.o main.o main debug
+	rm -f functions.o main.o main debug
