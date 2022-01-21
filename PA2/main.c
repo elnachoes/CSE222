@@ -3,26 +3,22 @@
 void main()
 {
     myNode* stack = stackInit();
+    myNode* queue= queueInit();
 
-    // printf("%d\n",stackIsEmpty(stack));
 
-    stackPush(stack,5);
-    stackPush(stack,6);
-    stackPush(stack,7);
-    stackPush(stack,8);
-    stackPush(stack,9);
-    stackPush(stack,10);
+    queueAdd(queue, 5);
 
-    stackPrint(stack);
+    // printf("%d\n",queueRemove(queue));
+    // printf("%d\n",queueRemove(queue));
 
-    stackPop(stack);
+    // printf("%d\n", stackIsEmpty(stack));
 
-    printf("\n");
+    // queuePrint(queue);
 
-    stackPrint(stack);
-    // printf("%d\n",stackIsEmpty(stack));
+    // queueRemove(queue);
 
+    // queuePrint(queue);
+
+    cleanup(queue);
     cleanup(stack);
-
-    return;
 }

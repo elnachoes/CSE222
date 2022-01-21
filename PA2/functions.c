@@ -45,13 +45,9 @@ int stackPop(myNode* stack)
 int stackIsEmpty(myNode* stack)
 {
     if(stack->nextNode == NULL)
-    {
-        return 0;
-    }
-    else
-    {
         return 1;
-    }
+    else
+        return 0;
 }
 
 void stackPrint(myNode* stack)
@@ -64,7 +60,8 @@ void stackPrint(myNode* stack)
     {
         printf("%d ",currentNode->data);
 
-        if(currentNode->nextNode == NULL) break;
+        if(currentNode->nextNode == NULL)
+            break;
 
         currentNode = currentNode->nextNode;
     }
@@ -91,10 +88,58 @@ myNode *queueInit()
 //FIFO (first in first out) structure
 void queueAdd(myNode* stack, int num)
 {
+    myNode* newNode = malloc(sizeof(myNode));
+    myNode* currentNode = stack;
 
+    while(currentNode->nextNode != NULL)
+    {
+        currentNode = currentNode->nextNode;
+    }
+
+    newNode->nextNode = NULL;
+    newNode->data = num;
+
+    currentNode->nextNode = newNode;
 }
 
+int queueRemove(myNode* queue)
+{
+    myNode* head = queue->nextNode;
+    int returnValue = head->data;
 
+    queue->nextNode = head->nextNode;
+
+    free(head);
+
+    return returnValue;
+}
+
+int queueIsEmpty(myNode* queue)
+{
+    if(queue->nextNode == NULL)
+        return 1;
+    else
+        return 0;
+}
+
+void queuePrint(myNode* queue)
+{
+    myNode* currentNode = queue->nextNode;
+
+    printf("HEAD--> ");
+
+    while(true)
+    {
+        printf("%d ",currentNode->data);
+
+        if(currentNode->nextNode == NULL)
+            break;
+
+        currentNode = currentNode->nextNode;
+    }
+
+    printf("<--TAIL");
+}
 
 // ------------QUEUE/STACK FUNCTIONS------------
 

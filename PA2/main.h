@@ -25,7 +25,7 @@ void stackPrint(myNode* stack);
 //queue functions
 myNode* queueInit();
 void queueAdd(myNode* queue, int num);
-void queueRemove(myNode* queue);
+int queueRemove(myNode* queue);
 int queueIsEmpty(myNode* queue);
 void queuePrint(myNode* queue);
 
