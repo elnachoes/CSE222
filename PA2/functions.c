@@ -56,14 +56,17 @@ void stackPrint(myNode* stack)
 
     printf("TOS-->");
 
-    while(true)
+    if(currentNode != NULL)
     {
-        printf("%d ",currentNode->data);
+        while(true)
+        {
+            printf("%d ",currentNode->data);
 
-        if(currentNode->nextNode == NULL)
-            break;
+            if(currentNode->nextNode == NULL)
+                break;
 
-        currentNode = currentNode->nextNode;
+            currentNode = currentNode->nextNode;
+        }
     }
 }
 
@@ -128,14 +131,17 @@ void queuePrint(myNode* queue)
 
     printf("HEAD--> ");
 
-    while(true)
+    if(currentNode != NULL)
     {
-        printf("%d ",currentNode->data);
+        while(true)
+        {
+            printf("%d ",currentNode->data);
 
-        if(currentNode->nextNode == NULL)
-            break;
+            if(currentNode->nextNode == NULL)
+                break;
 
-        currentNode = currentNode->nextNode;
+            currentNode = currentNode->nextNode;
+        }
     }
 
     printf("<--TAIL");
