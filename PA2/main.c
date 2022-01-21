@@ -4,11 +4,25 @@ void main()
 {
     myNode* stack = stackInit();
 
+    // printf("%d\n",stackIsEmpty(stack));
+
     stackPush(stack,5);
+    stackPush(stack,6);
+    stackPush(stack,7);
+    stackPush(stack,8);
+    stackPush(stack,9);
     stackPush(stack,10);
 
-    printf("%d",stack->nextNode->data);
-    printf("%d",stack->nextNode->nextNode->data);
+    stackPrint(stack);
+
+    stackPop(stack);
+
+    printf("\n");
+
+    stackPrint(stack);
+    // printf("%d\n",stackIsEmpty(stack));
+
+    cleanup(stack);
 
     return;
 }
