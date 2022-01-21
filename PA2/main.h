@@ -5,6 +5,9 @@
 //how buffer space for user input
 #define INPUT_BUFFER 1024
 
+//the arbitrary magic number to set the sentinel node's data to because of the assignment
+#define SENTINEL_DATA 1234567
+
 //linked list node
 typedef struct myNode
 {
