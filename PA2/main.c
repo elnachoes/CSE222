@@ -1,78 +1,112 @@
+//Author : Corbin Martin
+//Program Description : this is a program that allows you to store numbers in a linked list structure in a stack mode or a que mode
+//where you an print out the stack or queue, remove items from the stack or queue, and switch modes from stack mode and queue mode
+
+
 #include "main.h"
 
 void main()
 {
+    //print the welcome message and the help message to welcome the user and show the program works
+    printf(WELCOME_MESSAGE);
+    printf(HELP_MESSAGE);
+
+    //these are the stack and queue variables
     myNode* stack = stackInit();
     myNode* queue= queueInit();
 
+    //this variable stores the state of the program on weather it is in stack or queue mode
     int state = STACK_STATE;
 
+    //these are the variables for getting user input
     char userInputBuffer[INPUT_BUFFER];
     char invalidInputBuffer[INPUT_BUFFER];
-    char userInputOperation;
     int userInputNumber;
     int parseResult;
 
+    //main terminal loop
     while(true)
     {
+        //get the user input
         printf("> ");
         fgets(userInputBuffer, INPUT_BUFFER, stdin);
-        parseResult = sscanf(userInputBuffer, "%d%s",&userInputNumber,invalidInputBuffer);
 
-        if (parseResult == 0)
+        //this switches the mode to stack mode and prints the stack
+        if(userInputBuffer[0] == 's')
         {
-            parseResult = sscanf(userInputBuffer, "%c%s",&userInputOperation,invalidInputBuffer);
+            state = STACK_STATE;
 
-            if(userInputOperation == 's')
+            printf("Switching to stack mode\n");
+
+            if(!stackIsEmpty(stack))
             {
-                state = STACK_STATE;
+                stackPrint(stack);
+            }
+            else
+            {
+                printf("Stack is empty\n");
+            }
+        }
 
-                printf("Switching to stack mode\n");
+        //this switches the mode to queue mode and prints the queue
+        else if(userInputBuffer[0] == 'q')
+        {
+            state = QUEUE_STATE;
 
-                if(!stackIsEmpty(stack))
+            printf("Switching to queue mode\n");
+
+            queuePrint(queue);
+
+            printf("\n");
+        }
+
+        //this breaks the loop and exits the program
+        else if(userInputBuffer[0] == 'x')
+        {
+            break;
+        }
+
+        //this either removes the head of the queue or pops the top of the stack depeding on the mode of the program
+        else if(userInputBuffer[0] == '\n')
+        {
+            if(state == STACK_STATE)
+            {
+                if(stackIsEmpty(stack))
                 {
-                    stackPrint(stack);
+                    printf("Error: Stack is empty\n");
                 }
                 else
                 {
-                    printf("Stack is empty\n");
+                    printf("%d\n",stackPop(stack));
                 }
             }
-            else if(userInputOperation == 'q')
+            else
             {
-                state = QUEUE_STATE;
-
-                printf("Switching to queue mode\n");
-
-                queuePrint(queue);
+                if(queueIsEmpty(queue))
+                {
+                    printf("Error: Queue is empty\n");
+                }
+                else
+                {
+                    printf("%d\n",queueRemove(queue));
+                }
             }
-            else if(userInputOperation == 'x')
-            {
-                break;
-            }
-            else if(userInputOperation == '\n')
+        }
+
+        //this checks weather the user put in a number, if they did store it either in the que or the stack depending on the mode of the prgram
+        else if(userInputBuffer[0] >= '0' && userInputBuffer[0] <= '9')
+        {
+            parseResult = sscanf(userInputBuffer, "%d%s",&userInputNumber,invalidInputBuffer);
+
+            if(parseResult == 1)
             {
                 if(state == STACK_STATE)
                 {
-                    if(stackIsEmpty(stack))
-                    {
-                        printf("Error: Stack is empty\n");
-                    }
-                    else
-                    {
-                        stackPop(stack);
-                    }
+                    stackPush(stack,userInputNumber);
                 }
                 else
                 {
-                    if(queueIsEmpty(queue))
-                    {
-                        printf("Error: Queue is empty\n");
-                    }
-                    else
-                    {
-                        queueRemove(queue);
-                    }
+                    queueAdd(queue,userInputNumber);
                 }
             }
             else
@@ -80,21 +114,15 @@ void main()
                 printf(HELP_MESSAGE);
             }
         }
+
+        //if the user put in nonsense or needs help this will print the help message
         else
         {
-            printf("parse result %d", parseResult);
-
-            if(state = STACK_STATE)
-            {
-                stackPush(stack,userInputNumber);
-            }
-            else
-            {
-                queueAdd(queue,userInputNumber);
-            }
+            printf(HELP_MESSAGE);
         }
     }
 
+    //freeing the stack and que variables
     cleanup(queue);
     cleanup(stack);
 }
