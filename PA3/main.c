@@ -28,11 +28,29 @@ void main()
 
     ///---- HASH TABLE TEST CODE ----///
 
-    printf("%d\n", hash("asdf",5));
 
-    hashEntry hashTable[5];
+    hashEntry* hashTable = hashInit(5);
 
-    hashAdd(hashTable,"asdf","penis","head");
+    char testPlate[255] = "notinlist";
+
+    char testFirst[255];
+    char testLast[255];
+
+    int result = hashFind(hashTable,testPlate,testFirst,testLast);
+
+    if (result)
+    {
+        printf("%i : %s : %s : %s",result,testPlate,testFirst,testLast);
+    }
+
+
+    hashFree(hashTable);
+
+
+    // hashDump(hashTable,0);
+
+
+    // hashLoad(hashTable);
 
     // listPrint(hashTable[4]);
 

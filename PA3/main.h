@@ -27,7 +27,8 @@ void listFree(struct node* sent);
 
 
 ///---- HASHTABLE FUNCTIONS ----///
-int hash(char* plate, int hashTableSize);
+hashEntry *hashInit(int hashsize);
+int hash(char* plate);
 void hashAdd(hashEntry* hashTable, char* plate, char* first, char* last);
 int hashFind(hashEntry* hashTable, char* plate, char* first, char* last);
 void hashLoad(hashEntry* hashTable);
