@@ -18,41 +18,33 @@ void listAdd(struct node *sent, char* plate, char* firstname, char* lastname)
     newNode->plate = plate;
     newNode->first = firstname;
     newNode->last = lastname;
-    newNode->next = NULL;
-
-    node* currentNode = sent;
-
-    while (currentNode->next != NULL)
-    {
-        currentNode = currentNode->next;
-    }
-
-    currentNode->next = newNode;
+    newNode->next = sent->next;
+    sent->next = newNode;
 }
 
 
-int listFind(struct node* sent, char* plate, OUT_PARAMETER char* firstname, OUT_PARAMETER char* lastname)
+int listFind(struct node* sent, char* plate, char* firstname, char* lastname)
 {
     node* currentNode = sent->next;
 
     while (currentNode != NULL)
     {
-        if (currentNode->plate == plate)
+        if (!strcmp(currentNode->plate,plate))
         {
-            firstname = currentNode->first;
-            lastname = currentNode->last;
+
+            strcpy(firstname, currentNode->first);
+            strcpy(lastname, currentNode->last);
             return 1;
         }
         currentNode = currentNode->next;
     }
-
     return 0;
 }
 
 
 int listLen(struct node* sent)
 {
-    int length;
+    int length = 0;
 
     node* currentNode = sent->next;
 
@@ -72,7 +64,7 @@ void listPrint(struct node* sent)
 
     while (currentNode != NULL)
     {
-        printf("Plate: <%s>  Name: %s, %s", currentNode->plate, currentNode->first, currentNode->first);
+        printf("Plate: <%s>  Name: %s, %s\n", currentNode->plate, currentNode->first, currentNode->first);
         currentNode = currentNode->next;
     }
 }
