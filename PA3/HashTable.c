@@ -6,7 +6,7 @@ int _hashSize;
 
 hashEntry *hashInit(int hashsize)
 {
-    hashEntry* hashTable = malloc(sizeof(hashEntry[hashsize]));
+    hashEntry* hashTable = malloc(sizeof(hashEntry) * hashsize);
     _hashSize = hashsize;
 
     for (int i = 0; i < _hashSize; i++)
@@ -22,11 +22,11 @@ hashEntry *hashInit(int hashsize)
 int hash(char* plate)
 {
     int hashResult = 0;
-    for (int i = 0; i < strlen(plate); i++)
+    for (int i = 0; i <= strlen(plate) - 1; i++)
     {
-        hashResult += ( ( ( (i + 1) * (i + 1) ) * plate[i] ) % _hashSize - 1 );
+        hashResult += ( ( (i + 1) * (i + 1) ) * plate[i] );
     }
-    return hashResult;
+    return hashResult % _hashSize;
 }
 
 
@@ -48,14 +48,7 @@ void hashLoad(hashEntry* hashTable)
 {
     for (int i = 0; i < _hashSize; i++)
     {
-        if (!hashTable[i])
-        {
-            printf("Entry %d: length=0\n",i);
-        }
-        else
-        {
-            printf("Entry %d: length=%d\n",i,listLen(hashTable[i]));
-        }
+        printf("Entry %d: length=%d\n",i,listLen(hashTable[i]));
     }
 }
 

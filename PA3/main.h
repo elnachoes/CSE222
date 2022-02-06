@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include <math.h>
 
 ///---- LINKED LIST STUFF ----///
 #define SENT_DATA ""
