@@ -1,5 +1,5 @@
 main : main.o LinkedList.o HashTable.o
-	gcc main.o LinkedList.o HashTable.o -o main
+	gcc main.o LinkedList.o HashTable.o -o plate
 
 main.o : main.c main.h
 	gcc -g -c main.c -o main.o

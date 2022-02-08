@@ -4,7 +4,6 @@
 #include <string.h>
 
 ///---- LINKED LIST STUFF ----///
-#define SENT_DATA ""
 
 typedef struct node
 {
@@ -32,8 +31,11 @@ void hashAdd(hashEntry* hashTable, char* plate, char* first, char* last);
 int hashFind(hashEntry* hashTable, char* plate, char* first, char* last);
 void hashLoad(hashEntry* hashTable);
 void hashDump(hashEntry* hashTable, int cellNum);
+void hashDumpAll(hashEntry* hashTable);
 void hashFree(hashEntry* hashTable);
+FILE* LoadDatabase(hashEntry* hashTable, char* database);
+void CloseDatabase(FILE* fileHandle);
 
 
 ///---- MAIN FUNCTIONS ----///
-void hashDatabase();
+void CleanupMain(hashEntry* hashTable, FILE* databaseFileHandle);

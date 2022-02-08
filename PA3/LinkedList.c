@@ -4,15 +4,15 @@
 node* listInit()
 {
     node* newSentinal = malloc(sizeof(node));
-    newSentinal->plate = SENT_DATA;
-    newSentinal->first = SENT_DATA;
-    newSentinal->last = SENT_DATA;
+    newSentinal->plate = NULL;
+    newSentinal->first = NULL;
+    newSentinal->last = NULL;
     newSentinal->next = NULL;
     return newSentinal;
 }
 
 
-void listAdd(struct node *sent, char* plate, char* firstname, char* lastname)
+void listAdd(struct node* sent, char* plate, char* firstname, char* lastname)
 {
     node* newNode = malloc(sizeof(node));
     newNode->plate = plate;
@@ -29,7 +29,7 @@ int listFind(struct node* sent, char* plate, char* firstname, char* lastname)
 
     while (currentNode != NULL)
     {
-        if (!strcmp(currentNode->plate,plate))
+        if (!strcmp(currentNode->plate, plate))
         {
 
             strcpy(firstname, currentNode->first);
@@ -64,7 +64,7 @@ void listPrint(struct node* sent)
 
     while (currentNode != NULL)
     {
-        printf("Plate: <%s>  Name: %s, %s\n", currentNode->plate, currentNode->first, currentNode->last);
+        printf("Plate: <%s>  Name: %s, %s\n", currentNode->plate, currentNode->last, currentNode->first);
         currentNode = currentNode->next;
     }
 }
@@ -73,20 +73,16 @@ void listPrint(struct node* sent)
 void listFree(struct node* sent)
 {
     node* currentNode = sent;
-    node* nextNode = NULL;
 
-    while (true)
+    while (currentNode != NULL)
     {
-        if (currentNode->next == NULL)
-        {
-            free(currentNode);
-            return;
-        }
-        else
-        {
-            node* nextNode = currentNode->next;
-            free(currentNode);
-            currentNode = nextNode;
-        }
+        node* next = currentNode->next;
+
+        if (currentNode->plate != NULL) free(currentNode->plate);
+        if (currentNode->first != NULL) free(currentNode->first);
+        if (currentNode->last != NULL) free(currentNode->last);
+
+        free(currentNode);
+        currentNode = next;
     }
 }
