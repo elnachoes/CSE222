@@ -11,4 +11,4 @@ HashTable.o : HashTable.c main.h
 	gcc -g -c HashTable.c -o HashTable.o
 
 clean :
-	rm -f main main.o LinkedList.o HashTable.o
+	rm -f plate main.o LinkedList.o HashTable.o

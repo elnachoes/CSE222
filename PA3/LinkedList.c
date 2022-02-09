@@ -11,18 +11,23 @@ node* listInit()
     return newSentinal;
 }
 
-
+//adds a new list item by allocating exactly as much space as needed for the node and input strings
+//also appends the new item to the front of the linked list
 void listAdd(struct node* sent, char* plate, char* firstname, char* lastname)
 {
     node* newNode = malloc(sizeof(node));
-    newNode->plate = plate;
-    newNode->first = firstname;
-    newNode->last = lastname;
+    newNode->plate = malloc( sizeof(char) * (strlen(plate) + 1) );
+    strcpy(newNode->plate,plate);
+    newNode->first = malloc( sizeof(char) * (strlen(firstname) + 1) );
+    strcpy(newNode->first,firstname);
+    newNode->last = malloc( sizeof(char) * (strlen(lastname) + 1) );
+    strcpy(newNode->last,lastname);
     newNode->next = sent->next;
     sent->next = newNode;
 }
 
-
+//finds a item inside the linked list and stores the firstname and last name in the input variables if found
+//returns a 1 if found and a 0 if not found
 int listFind(struct node* sent, char* plate, char* firstname, char* lastname)
 {
     node* currentNode = sent->next;
@@ -41,7 +46,7 @@ int listFind(struct node* sent, char* plate, char* firstname, char* lastname)
     return 0;
 }
 
-
+//returns the length of the list
 int listLen(struct node* sent)
 {
     int length = 0;
@@ -57,7 +62,7 @@ int listLen(struct node* sent)
     return length;
 }
 
-
+//prints the contents of the list
 void listPrint(struct node* sent)
 {
     node* currentNode = sent->next;
@@ -69,7 +74,7 @@ void listPrint(struct node* sent)
     }
 }
 
-
+//frees all elements in the list and the dynamically allocated strings stored in it
 void listFree(struct node* sent)
 {
     node* currentNode = sent;
