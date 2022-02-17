@@ -14,8 +14,8 @@ typedef struct node* Node;
 
 int height(Node root);
 int balanced(Node root);
-Node add(Node root, char *plate, char *first, char *last);
 int search(Node root, char *plate, char *first, char *last);
+Node add(Node root, char *plate, char *first, char *last);
 Node delete(Node root, char *plate);
 void LNR(Node root);
 void NLR(Node root);
