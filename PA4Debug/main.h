@@ -19,13 +19,15 @@ typedef struct node* Node;
 int height(Node root);
 int balanced(Node root);
 int search(Node root, char *plate, char *first, char *last);
+
 Node add(Node root, char *plate, char *first, char *last);
 Node delete(Node root, char *plate);
-//void ReParent(Node Parent, Node Orphan);
 Node ReParent(Node Parent, Node Orphan);
+
 void LNR(Node root);
-void LNR_debug(Node root);
-void RNL(Node root);
 void NLR(Node root);
+void LRN(Node root);
 void freeNode(Node root);
 void treeFree(Node root);
+
+Node LoadDatabase(char* database);

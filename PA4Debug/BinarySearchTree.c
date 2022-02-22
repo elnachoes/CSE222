@@ -65,36 +65,16 @@ int balanced(Node root)
     return (balanced(root->right) && balanced(root->right) && abs(height(root->left) - height(root->right)) <= 1) ? 1 : 0;
 }
 
-//goes through the and prints the left node, right node and then the node in an LNR traversal
+//goes through the and prints the left node, the node, and the right node in an LNR traversal
 void LNR(Node root)
 {
     if (!root) return;
     LNR(root->left);
+    printf("Plate: <%s> Name: %s,%s\r\n", root->plate, root->last, root->first);
     LNR(root->right);
-    printf("Plate: <%s> Name: %s,%s\r\n", root->plate, root->last, root->first);
 }
 
-//goes through the and prints the left node, right node and then the node in an LNR traversal
-void LNR_debug(Node root)
-{
-    if (!root) return;
-    LNR_debug(root->left);
-    LNR_debug(root->right);
-    printf(" <%s> ", root->plate);
-}
-
-
-
-//goes through the and prints the right node, left node and then the node in an LNR traversal
-void RNL(Node root)
-{
-    if (!root) return;
-    RNL(root->right);
-    RNL(root->left);
-    printf("Plate: <%s> Name: %s,%s\r\n", root->plate, root->last, root->first);
-}
-
-//goes through the and prints the left node, right node and then the node in an LNR traversal
+//goes through the and prints the the node, the left node, and right node in an LNR traversal
 void NLR(Node root)
 {
     if (!root) return;
@@ -103,20 +83,22 @@ void NLR(Node root)
     NLR(root->right);
 }
 
-//LNR traversal free
-void treeFree(Node root)
+//goes through the and prints the left node, right node and then the node in an LNR traversal
+void LRN(Node root)
 {
     if (!root) return;
-    treeFree(root->left);
-    treeFree(root->right);
-    freeNode(root);
+    LRN(root->left);
+    LRN(root->right);
+    printf("Plate: <%s> Name: %s,%s\r\n", root->plate, root->last, root->first);
 }
 
-//UNFINISHED
+
+//this deletes a specific node BUT preserves the children of the deleted node
 Node delete(Node root, char* plate)
 {
     if (root == NULL) return NULL;
 
+    // if the left node isn't null check if it is the node you want to delete
     if (root->left != NULL)
     {
         if (strcmp(root->left->plate,plate) == 0)
@@ -125,13 +107,13 @@ Node delete(Node root, char* plate)
             freeNode(root->left);
             root->left = newParent;
             return root;
-
         }
         else
         {
             root->left = delete(root->left, plate);
         }
     }
+    // if the right node isn't null check if it is the node you want to delete
     if (root->right != NULL)
     {
         if (strcmp(root->right->plate, plate) == 0)
@@ -140,23 +122,23 @@ Node delete(Node root, char* plate)
             freeNode(root->right);
             root->right = newParent;
             return root;
-
         }
         else
         {
             root->right = delete(root->right, plate);
         }
     }
+    // if the right node isn't null check if it is the node you want to delete
     if (strcmp(root->plate, plate) == 0)
     {
         Node newParent = ReParent(root->right, root->left);
         freeNode(root);
         root = newParent;
-        return root;
     }
     return root;
 }
 
+//this takes in a parent and an orphan and orders the hierarchy accordingly 
 Node ReParent(Node Parent, Node Orphan)
 {
     if (Orphan == NULL) return Parent;
@@ -188,11 +170,46 @@ Node ReParent(Node Parent, Node Orphan)
     }
 }
 
-
+//this frees a specific node which is used in delete and treeFree
 void freeNode(Node root)
 {
     free(root->plate);
     free(root->first);
     free(root->last);
     free(root);
+}
+
+//LNR traversal free
+void treeFree(Node root)
+{
+    if (!root) return;
+    treeFree(root->left);
+    treeFree(root->right);
+    freeNode(root);
+}
+
+
+Node LoadDatabase(char* database)
+{
+    Node root = NULL;
+    FILE* fileHandle = fopen(database, "r");
+    if (fileHandle == NULL)
+    {
+        printf("ERROR Cannot open %s\r\n", database);
+        return NULL;
+    }
+
+    char chunk[1000];
+    char plate[257];
+    char first[257];
+    char last[257];
+
+    while (fgets(chunk, sizeof(chunk), fileHandle) != NULL)
+    {
+        sscanf(chunk, "%s%s%s", plate, first, last);
+        root = add(root, plate, first, last);
+    }
+    fclose(fileHandle);
+
+    return root;
 }
