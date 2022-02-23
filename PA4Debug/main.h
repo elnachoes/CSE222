@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 //I thought this was in stdlib but it wasn't so I found it and just stuck it here
 //I know its jankey but I saw it being used and I wanted to use it
@@ -23,11 +24,10 @@ int search(Node root, char *plate, char *first, char *last);
 Node add(Node root, char *plate, char *first, char *last);
 Node delete(Node root, char *plate);
 Node ReParent(Node Parent, Node Orphan);
+Node LoadDatabase(char* database);
 
 void LNR(Node root);
 void NLR(Node root);
 void LRN(Node root);
 void freeNode(Node root);
 void treeFree(Node root);
-
-Node LoadDatabase(char* database);

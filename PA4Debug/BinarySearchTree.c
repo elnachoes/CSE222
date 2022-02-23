@@ -93,51 +93,6 @@ void LRN(Node root)
 }
 
 
-//this deletes a specific node BUT preserves the children of the deleted node
-Node delete(Node root, char* plate)
-{
-    if (root == NULL) return NULL;
-
-    // if the left node isn't null check if it is the node you want to delete
-    if (root->left != NULL)
-    {
-        if (strcmp(root->left->plate,plate) == 0)
-        {
-            Node newParent = ReParent(root->left->right, root->left->left);
-            freeNode(root->left);
-            root->left = newParent;
-            return root;
-        }
-        else
-        {
-            root->left = delete(root->left, plate);
-        }
-    }
-    // if the right node isn't null check if it is the node you want to delete
-    if (root->right != NULL)
-    {
-        if (strcmp(root->right->plate, plate) == 0)
-        {
-            Node newParent = ReParent(root->right->right, root->right->left);
-            freeNode(root->right);
-            root->right = newParent;
-            return root;
-        }
-        else
-        {
-            root->right = delete(root->right, plate);
-        }
-    }
-    // if the right node isn't null check if it is the node you want to delete
-    if (strcmp(root->plate, plate) == 0)
-    {
-        Node newParent = ReParent(root->right, root->left);
-        freeNode(root);
-        root = newParent;
-    }
-    return root;
-}
-
 //this takes in a parent and an orphan and orders the hierarchy accordingly 
 Node ReParent(Node Parent, Node Orphan)
 {
@@ -170,13 +125,107 @@ Node ReParent(Node Parent, Node Orphan)
     }
 }
 
-//this frees a specific node which is used in delete and treeFree
-void freeNode(Node root)
+//this deletes a specific node BUT preserves the children of the deleted node
+Node delete(Node root, char* plate)
 {
-    free(root->plate);
-    free(root->first);
-    free(root->last);
-    free(root);
+    if (strcmp(root->plate, plate) > 0) 
+    {
+        root->left = delete(root->left, plate);
+    }
+    else if (strcmp(root->plate, plate) < 0)
+    {
+        root->right = delete(root->right, plate);
+    }
+    else
+    {
+        if (root->left == NULL && root->right == NULL)
+        {
+
+            freeNode(root);
+            root = NULL;
+        }
+        else if (root->left == NULL)
+        {
+            //STEP 1 : make a temp node called newRoot for the right node
+            
+            Node newRoot = root->right;
+
+            //STEP 2 : free the contents of root
+            
+            free(root->plate);
+            free(root->first);
+            free(root->last);
+
+            //STEP 3 : copy the contents of newRoot into root
+            
+            root->plate = newRoot->plate;
+            root->first = newRoot->first;
+            root->last = newRoot->last;
+            root->left = newRoot->left;
+            root->right = newRoot->right;
+
+            //STEP 4 : free the newRoot
+
+            free(newRoot);
+        }
+        else if (root->right == NULL)
+        {
+            //STEP 1 : make a temp node called newRoot for the left node
+
+            Node newRoot = root->left;
+
+            //STEP 2 : free the contents of root
+
+            free(root->plate);
+            free(root->first);
+            free(root->last);
+
+            //STEP 3 : copy the contents of newRoot into root
+
+            root->plate = newRoot->plate;
+            root->first = newRoot->first;
+            root->last = newRoot->last;
+            root->left = newRoot->left;
+            root->right = newRoot->right;
+
+            //STEP 4 : free the newRoot
+
+            free(newRoot);
+        }
+        else
+        {
+            //STEP1 : make a temp node of the left child the orphan
+            
+            Node orphan = root->left;
+
+            //STEP2 : make a temp node of the right child the newRoot
+            
+            Node newRoot = root->right;
+
+            //STEP3 : free the contents of the root node (plate,first,last)
+            
+            free(root->plate);
+            free(root->first);
+            free(root->last);
+            
+            //STEP4 : copy the contents of the newRoot into the old root including its left and right node pointers
+
+            root->plate = newRoot->plate;
+            root->first = newRoot->first;
+            root->last = newRoot->last;
+            root->left = newRoot->left;
+            root->right = newRoot->right;
+
+            //STEP5 : free the newRoot
+            
+            free(newRoot);
+            
+            //Step6 : ReParent the orphan
+
+            ReParent(root, orphan);
+        }
+    }
+    return root;
 }
 
 //LNR traversal free
@@ -188,6 +237,14 @@ void treeFree(Node root)
     freeNode(root);
 }
 
+//this frees a specific node which is used in delete and treeFree
+void freeNode(Node root)
+{
+    free(root->plate);
+    free(root->first);
+    free(root->last);
+    free(root);
+}
 
 Node LoadDatabase(char* database)
 {
