@@ -1,8 +1,9 @@
 #include "main.h"
 
-//NOTE : DUPLICATES MIGHT BREAK THIS IF YOU TRY TO SHOVE IN A DUPLICATE
+// this adds a new node to a tree and returns the root of the tree
 Node add(Node root, char *plate, char *first, char *last)
 {
+    // when the recursion lands on null make a new node and return the root
     if (root == NULL)
     {
         root = malloc(sizeof(node));
@@ -18,16 +19,19 @@ Node add(Node root, char *plate, char *first, char *last)
 
         return root;
     }
+    // if the plate is lesser than the current plate recurse to the left
     else if (strcmp(plate, root->plate) < 0)
     {
         root->left = add(root->left, plate, first, last);
         return root;
     }
+    // if the plate is greater than the current plate recurse to the right
     else if (strcmp(plate, root->plate) > 0)
     {
         root->right = add(root->right, plate, first, last);
         return root;
     }
+    // if you run into a duplicate toss it out, duplicates would break the inherrent structure here
     else
     {
         return root;
@@ -39,29 +43,36 @@ int search(Node root, char *plate, char *first, char *last)
 {
     if (root == NULL) return 0;
 
+    // if it finds the string copy the first and last name into
     if (strcmp(root->plate,plate) == 0)
     {
-        first = root->first;
-        last = root->last;
+        strcpy(first, root->first);
+        strcpy(last, root->last);
         return 1;
     }
 
+    // if the root is found on the left side return a 1
     if (search(root->left, plate, first, last)) return 1;
 
+    // if the root is found on the right return a 1
     return search(root->right, plate, first, last);
 }
 
 //finds the maximum height of a tree
 int height(Node root)
 {
-    if (root == NULL) return 0;
+    // if you get to the bottom of the tree the height of the tree is -1
+    if (root == NULL) return -1;
+    // the height of the tree will always be one more than the left or the right nodes of a root
     return 1 + max(height(root->left), height(root->right));
 }
 
 //checks to see if a tree is balanced or not
 int balanced(Node root)
 {
+    // if the root is null 
     if (root == NULL) return 1;
+    // if both the left and right are balanced and the difference between the left heigth and right height is no greater than 1
     return (balanced(root->right) && balanced(root->right) && abs(height(root->left) - height(root->right)) <= 1) ? 1 : 0;
 }
 
@@ -75,6 +86,7 @@ void LNR(Node root)
 }
 
 //goes through the and prints the the node, the left node, and right node in an LNR traversal
+//(pre order)
 void NLR(Node root)
 {
     if (!root) return;
@@ -84,6 +96,7 @@ void NLR(Node root)
 }
 
 //goes through the and prints the left node, right node and then the node in an LNR traversal
+//(post order)
 void LRN(Node root)
 {
     if (!root) return;
@@ -92,140 +105,86 @@ void LRN(Node root)
     printf("Plate: <%s> Name: %s,%s\r\n", root->plate, root->last, root->first);
 }
 
-
-//this takes in a parent and an orphan and orders the hierarchy accordingly 
-Node ReParent(Node Parent, Node Orphan)
-{
-    if (Orphan == NULL) return Parent;
-
-    if (Parent == NULL && Orphan != NULL) return Orphan;
-
-    if (Parent->left == NULL && strcmp(Parent->plate, Orphan->plate) > 0)
-    {
-        Parent->left = Orphan;
-        return Parent;
-    }
-    else if (Parent->right == NULL && strcmp(Parent->plate, Orphan->plate) < 0)
-    {
-        Parent->right = Orphan;
-        return Parent;
-    }
-    else
-    {
-        if (strcmp(Parent->plate, Orphan->plate) > 0)
-        {
-            Parent->left = ReParent(Parent->left, Orphan);
-            return Parent;
-        }
-        else
-        {
-            Parent->right = ReParent(Parent->right, Orphan);
-            return Parent;
-        }
-    }
-}
-
-//this deletes a specific node BUT preserves the children of the deleted node
+// this deletes a node from a tree and organizes it to a specific algorithm detailed in the assignment 
 Node delete(Node root, char* plate)
 {
-    if (strcmp(root->plate, plate) > 0) 
+    //case 1 the root is null return null
+    if (root == NULL) return NULL;
+
+    //if the plate is less than the root plate recurse left
+    if (strcmp(root->plate, plate) > 0)
     {
         root->left = delete(root->left, plate);
+        return root;
     }
+    //if the plate is greater than the root plate recurse right
     else if (strcmp(root->plate, plate) < 0)
     {
         root->right = delete(root->right, plate);
+        return root;
     }
     else
     {
+        //case 2 both roots of the 
         if (root->left == NULL && root->right == NULL)
         {
-
             freeNode(root);
-            root = NULL;
+            return NULL;
         }
-        else if (root->left == NULL)
-        {
-            //STEP 1 : make a temp node called newRoot for the right node
-            
-            Node newRoot = root->right;
 
-            //STEP 2 : free the contents of root
-            
-            free(root->plate);
-            free(root->first);
-            free(root->last);
-
-            //STEP 3 : copy the contents of newRoot into root
-            
-            root->plate = newRoot->plate;
-            root->first = newRoot->first;
-            root->last = newRoot->last;
-            root->left = newRoot->left;
-            root->right = newRoot->right;
-
-            //STEP 4 : free the newRoot
-
-            free(newRoot);
-        }
+        //case 3 the root only has one right node
         else if (root->right == NULL)
         {
-            //STEP 1 : make a temp node called newRoot for the left node
-
-            Node newRoot = root->left;
-
-            //STEP 2 : free the contents of root
-
-            free(root->plate);
-            free(root->first);
-            free(root->last);
-
-            //STEP 3 : copy the contents of newRoot into root
-
-            root->plate = newRoot->plate;
-            root->first = newRoot->first;
-            root->last = newRoot->last;
-            root->left = newRoot->left;
-            root->right = newRoot->right;
-
-            //STEP 4 : free the newRoot
-
-            free(newRoot);
+            Node temp = root->left;
+            root->left = NULL;
+            root->right = NULL;
+            freeNode(root);
+            return temp;
         }
+
+        //case 4 the root only has one right node
+        else if (root->left == NULL)
+        {
+            Node temp = root->right;
+            root->left = NULL;
+            root->right = NULL;
+            freeNode(root);
+            return temp;
+        }
+        //case 5 the root's left subtree's biggest node is the root's left node and the root has a right node
+        else if (root->left->right == NULL)
+        {
+            Node temp = root->left;
+            temp->right = root->right;
+            root->left = NULL;
+            root->right = NULL;
+            freeNode(root);
+            return temp;
+        }
+        //case 6 the root's left node has more nodes to the right of it along with a right node on the root
         else
         {
-            //STEP1 : make a temp node of the left child the orphan
-            
-            Node orphan = root->left;
+            Node previous = root->left;
+            Node current = previous->right;
 
-            //STEP2 : make a temp node of the right child the newRoot
-            
-            Node newRoot = root->right;
+            while (current->right != NULL)
+            {
+                previous = current;
+                current = current->right;
+            }
 
-            //STEP3 : free the contents of the root node (plate,first,last)
-            
-            free(root->plate);
-            free(root->first);
-            free(root->last);
-            
-            //STEP4 : copy the contents of the newRoot into the old root including its left and right node pointers
+            previous->right = current->left;
+            current->left = root->left;
+            current->right = root->right;
 
-            root->plate = newRoot->plate;
-            root->first = newRoot->first;
-            root->last = newRoot->last;
-            root->left = newRoot->left;
-            root->right = newRoot->right;
+            root->left = NULL;
+            root->right = NULL;
 
-            //STEP5 : free the newRoot
-            
-            free(newRoot);
-            
-            //Step6 : ReParent the orphan
+            freeNode(root);
 
-            ReParent(root, orphan);
+            return current;
         }
     }
-    return root;
 }
 
 //LNR traversal free
@@ -246,13 +205,13 @@ void freeNode(Node root)
     free(root);
 }
 
+//this conveniently loads in my database and passes back a loaded up tree
 Node LoadDatabase(char* database)
 {
     Node root = NULL;
     FILE* fileHandle = fopen(database, "r");
     if (fileHandle == NULL)
     {
-        printf("ERROR Cannot open %s\r\n", database);
         return NULL;
     }
 

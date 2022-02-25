@@ -7,6 +7,8 @@
 //I know its jankey but I saw it being used and I wanted to use it
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 
+#define STRING_BUFFER 1000
+
 typedef struct node{
     char *plate;
     char *first;
@@ -23,7 +25,6 @@ int search(Node root, char *plate, char *first, char *last);
 
 Node add(Node root, char *plate, char *first, char *last);
 Node delete(Node root, char *plate);
-Node ReParent(Node Parent, Node Orphan);
 Node LoadDatabase(char* database);
 
 void LNR(Node root);

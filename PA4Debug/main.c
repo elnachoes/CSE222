@@ -2,143 +2,101 @@
 
 void main(int argc,char** argv)
 {
+    // initialize the tree to null to start out with
     Node tree = NULL;
+    
+    // handle cmc args
+    if (argc == 2)
+    {
+        // load database will initialize the tree with the data in the database and return an initialized tree
+        tree = LoadDatabase(argv[1]);
+        if (tree == NULL)
+        {
+            // if the database doesn't exist print this error and get out
+            printf("ERROR Cannot open %s\r\n", argv[1]);
+            return;
+        }
+    }
+    else
+    {
+        // if they didn't put in a seccond cmd arg let them know and hop out
+        printf("Usage: ./plate4 databasefile");
+        return;
+    }
+    
+    // main program loop
+    while (true)
+    {
+        // strings for data processing
+        char UserInputBuffer[STRING_BUFFER];
+        char arg1[STRING_BUFFER];
+        char arg2[STRING_BUFFER];
+        char first[STRING_BUFFER];
+        char last[STRING_BUFFER];
 
-    // a b c d e f g h i
+        // get input from the user
+        printf("Enter a command or plate: ");
+        char* fgetsResult = fgets(UserInputBuffer, STRING_BUFFER, stdin);
 
-    tree = add(tree, "o", "asdf", "asdf");
-    tree = add(tree, "h", "asdf", "asdf");
-    tree = add(tree, "y", "asdf", "asdf");
-    tree = add(tree, "a", "asdf", "asdf");
-    tree = add(tree, "j", "asdf", "asdf");
-    tree = add(tree, "z", "asdf", "asdf");
-    tree = add(tree, "i", "asdf", "asdf");
-    tree = add(tree, "l", "asdf", "asdf");
-    tree = add(tree, "k", "asdf", "asdf");
-    tree = add(tree, "x", "asdf", "asdf");
-    tree = add(tree, "r", "asdf", "asdf");
-    tree = add(tree, "w", "asdf", "asdf");
+        // if they put in ctrl d exit
+        if (fgetsResult == NULL)
+        {
+            printf("\r\nFreeing memory\r\n");
+            break;
+        }
 
-        
-    //tree = LoadDatabase("database.txt");
-    //tree = LoadDatabase("database.txt");
-    //tree = LoadDatabase("database.txt");
+        // scan in arguments from the user
+        int sscanfResult = sscanf(fgetsResult, "%s%s", arg1, arg2);
 
-    //tree = delete(tree, "c");
-    printf("");
-    tree = delete(tree, "o");
-    printf("");
+        // if they put in *DUMP print the height, if it was balanced, LNR traversal, NLR traversal, and LRN traversal
+        if (strcmp(arg1, "*DUMP") == 0)
+        {
+            printf("\r\n");
+            printf("TREE HEIGHT: %d\r\n", height(tree));
 
+            (balanced(tree)) ? printf("BALANCED: YES\r\n\r\n") : printf("BALANCED: NO\r\n\r\n");
+
+            printf("LNR TRAVERSAL:\r\n");
+            LNR(tree);
+            printf("\r\n");
+            printf("NLR TRAVERSAL:\r\n");
+            NLR(tree);
+            printf("\r\n");
+            printf("LRN TRAVERSAL:\r\n");
+            LRN(tree);
+            printf("\r\n");
+        }
+        // if they put in *DELETE and they gave a argument for what to delete, delete a node
+        else if (strcmp(arg1, "*DELETE") == 0 && sscanfResult == 2)
+        {
+            //if the search returns a 1 delete the node in the tree 
+            if (search(tree,arg2,first,last))
+            {
+                tree = delete(tree, arg2);
+                printf("SUCCESS\r\n");
+            }
+            //if it couldn't find the node let the user knmow
+            else
+            {
+                printf("PLATE NOT FOUND\r\n");
+            }
+        }
+        else
+        {
+            //if the search returns a 1 print the first and last that comes back from search
+            if (search(tree, arg1, first, last))
+            {
+                printf("First name: %s\r\n", first);
+                printf("Last name: %s\r\n", last);
+            }
+            //if it couldn't find the node let the user knmow
+            else
+            {
+                printf("PLATE NOT FOUND\r\n");
+            }
+        }
+    }
+
+    //free the tree 
     treeFree(tree);
-    //height(tree);
-    //printf("\r\n");
-    //LNR(tree);
-    //printf("\r\n");
-    //NLR(tree);
-    //printf("\r\n");
-    //LRN(tree);
-    //printf("\r\n");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //Node tree = NULL;
-    //if (argc >= 2)
-    //{
-    //    tree = LoadDatabase(argv[1]);
-    //    if (tree == NULL)
-    //    {
-    //        return;
-    //    }
-    //}
-    //else
-    //{
-    //    return;
-    //}
-    //
-    //while (true)
-    //{
-    //    char UserInputBuffer[1000];
-    //    char command[1000];
-    //    char plate[257];
-    //    char first[257];
-    //    char last[257];
-
-    //    // get input from the user
-    //    printf("Enter a command or plate: ");
-    //    char* fgetsResult = fgets(UserInputBuffer, 1000, stdin);
-
-    //    // if they put in ctrl d exit
-    //    if (fgetsResult == NULL)
-    //    {
-    //        printf("\r\nFreeing memory\r\n");
-    //        break;
-    //    }
-
-    //    //int sscanfResult = sscanf(fgetsResult, "%s%s", command, plate);
-
-    //    //printf("%d",sscanfResult);
-
-    //    if (strcmp(fgetsResult, "*DUMP") == 0)
-    //    {
-    //        height(tree);
-    //        printf("\r\n");
-    //        LNR(tree);
-    //        printf("\r\n");
-    //        NLR(tree);
-    //        printf("\r\n");
-    //        LRN(tree);
-    //        printf("\r\n");
-    //    }
-    //    else if (strcmp(command, "*DELETE") == 0)
-    //    {
-    //        if (sscanf(fgetsResult, "%s%s", command, plate) == 2)
-    //        {
-    //            if (search(tree,plate,first,last))
-    //            {
-    //                tree = delete(tree, plate);
-    //                printf("SUCCESS\r\n");
-    //            }
-    //            else
-    //            {
-    //                printf("PLATE NOT FOUND\r\n");
-    //            }
-    //        }
-    //        else
-    //        {
-    //            printf("PLATE NOT FOUND\r\n");
-    //        }
-    //    }
-    //    else
-    //    {
-    //        
-    //        if (search(tree, fgetsResult, first, last))
-    //        {
-    //            printf("First name: %s\r\n", first);
-    //            printf("Last name: %s\r\n", last);
-    //        }
-    //        else
-    //        {
-    //            printf("PLATE NOT FOUND\r\n");
-    //        }
-    //        
-    //    }
-    //}
-
-    //treeFree(tree);
 }
