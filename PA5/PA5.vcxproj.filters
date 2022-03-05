@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Inventory.c">
+    <ClCompile Include="KnapsackFunctions.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.c">

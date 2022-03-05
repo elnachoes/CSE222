@@ -98,7 +98,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Inventory.c" />
+    <ClCompile Include="KnapsackFunctions.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>

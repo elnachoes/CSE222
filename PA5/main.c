@@ -1,138 +1,83 @@
+/// Author : Corbin Martin
+/// Date : March 5th 2022
+/// Program Name : KnapSack Solver (PA5 CSE222)
+/// 
+///	Summary : This is a program that reads in a list of items with a name value and weight
+/// and uses a recursive function called MaxValue() which utilizes dynamic programming to
+/// cache results from previous calls of MaxValue(). It will print the maximum value that
+/// can be extracted from the set of items and which items would need to be picked and in 
+/// what quantities. Each item in the database should be a "name value weight" and there
+/// can only be a maximum of 128 items due to the spec of the assignment. The program is 
+/// called with 2 arguments for the capacity (has to between 1 and 1024 due to the spec of
+/// the assignment) and a .txt file that contains our database.
+
 #include "main.h"
-
-#define ITEM_BUFFER 128
-#define NAME_BUFFER 32
-#define CAPACITIES_BUFFER 1024
-
-//This is what max value will return in order to give a value and an inventory
-typedef struct Answer
-{
-	int value;
-	int inventory[ITEM_BUFFER];
-} Answer;
-
-
-char name[ITEM_BUFFER][NAME_BUFFER];
-int weight[ITEM_BUFFER];
-int value[ITEM_BUFFER];
-int inventory[ITEM_BUFFER] = { 0 };
-int capacitiesCache[ITEM_BUFFER][CAPACITIES_BUFFER] = { 0 };
-int recurranceCount = 0;
-
-int itemCount;
-
-Answer maxValueCache[ITEM_BUFFER][CAPACITIES_BUFFER];
-
-Answer MaxValue(int capacity)
-{
-	//bestAnswer always defaults to zero in the event that you cant fit any items into the new cap
-	Answer bestAnswer = { 0, {0} };
-
-	//for each item in the item list find the best values for the amount of items to their values
-	for (int i = 0; i < itemCount; i++)
-	{
-		//if the weight is greater than the capacity dont try to calculate a best value because there is none
-		if (weight[i] <= capacity)
-		{
-			int newValue;
-			Answer newAnswer;
-
-			//if the MaxValue was already calculated for a certain value retrieve it from the cache
-			if (maxValueCache[i][capacity - weight[i]].value != -1)
-			{
-				newAnswer = maxValueCache[i][capacity - weight[i]];
-				newValue = value[i] + newAnswer.value;
-			}
-			//if the MaxValue was NOT already calculated go calculate it
-			else
-			{
-				newAnswer = MaxValue(capacity - weight[i]);
-				maxValueCache[i][capacity - weight[i]] = newAnswer;
-				newValue = value[i] + newAnswer.value;
-			}
-
-			if (newValue > bestAnswer.value)
-			{
-				bestAnswer = newAnswer;
-				bestAnswer.value = newValue;
-				++bestAnswer.inventory[i];
-			}
-		}
-	}
-
-	//for tracking how many times the recurrence has happened
-	++recurranceCount;
-	return bestAnswer;
-}
-
-
-///THIS IS THE OLD VERSION THAT RETURNS AN INT
-///I will leave it in for reference
-//int MaxValue(int cap)
-//{
-//	int best = 0;
-//	for (int i = 0; i < itemCount; i++)
-//	{
-//		if (weight[i] <= cap)
-//		{
-//			int newValue;
-//			if (capacitiesCache[i][cap - weight[i]] != -1)
-//			{
-//				newValue = capacitiesCache[i][cap - weight[i]];
-//			}
-//			else
-//			{
-//				newValue = value[i] + MaxValue(cap - weight[i]);
-//				capacitiesCache[i][cap - weight[i]] = newValue;
-//			}
-//			
-//			if (newValue > best)
-//			{
-//				best = newValue;
-//			}
-//
-//			inventory[i] = cap / newValue;
-//		}
-//	}
-//
-//	//for tracking how many times the recurrence has happened
-//	++recurranceCount;
-//	return best;
-//}
 
 void main(int argc, char** argv)
 {
-	memset(capacitiesCache, -1, sizeof(capacitiesCache));
+	ItemDataBase* database = NULL;
+	Answer answer;
+	int capacity = 0;
 
-	for (int i = 0; i < ITEM_BUFFER; i++)
-		for (int j = 0; j < CAPACITIES_BUFFER; j++)
-			maxValueCache[i][j].value = -1;
+	//process the cmd args and load in the item database
+	if (argc == 3)
+	{
+		//load in the database from the file
+		database = LoadItemDataBase(argv[2]);
+		
+		//if the database file isn't there and it returns null print the ussage error message and exit
+		if (database == NULL)
+		{
+			printf(ERROR_USAGE_MESSAGE);
+			return;
+		}
+
+		//load in the capacity
+		int sscanfResult = sscanf(argv[1],"%d",&capacity);
+		
+		//if the sscanf didn't read in a integer print the ussage error message and exit
+		if (sscanfResult == 0)
+		{
+			printf(ERROR_USAGE_MESSAGE);
+			return;
+		}
+		//if they put in an illegal capacity (should be between 1 and 1024 by the assignment spec) print the illegal capacity error and exit
+		else if (capacity > 1024 || capacity < 1)
+		{
+			printf(ERROR_ILLEGAL_CAPACITY);
+			return;
+		}
+	}
+	//if they didn't put in a correct number of arguments print the ussage error message and exit
+	else
+	{
+		printf(ERROR_USAGE_MESSAGE);
+		return;
+	}
+
+	//find the maxvalue given the database
+	answer = MaxValue(capacity, *database, true);
 
 
+	//print out the results of the database
+	printf("\r\n");
+	printf("Weight  Value   Name\r\n");
+	printf("------  -----   ----\r\n");
+	for (int i = 0; i < database->itemCount; i++)
+	{
+		printf("%d\t%d\t%s\r\n", database->weight[i], database->value[i], database->name[i]);
+	}
+	printf("--------------------\r\n");
+	printf("Bag's capacity=%d\r\n", capacity);
+	printf("Highest possible value=%d\r\n", answer.value);
+	for (int i = 0; i < database->itemCount; i++)
+	{
+		if (answer.inventory[i] != 0)
+		{
+			printf("Item %d (%s): %d\r\n", i, database->name[i], answer.inventory[i]);
+		}
+	}
 
-
-	//memset(maxValueCache)
-
-	int cap = 22;
-
-	strcpy(name[0], "qwer");
-	weight[0] = 5;
-	value[0] = 8;
-
-	strcpy(name[1], "asdf");
-	weight[1] = 1;
-	value[1] = 1;
-
-	//strcpy(name[2], "zxcv");
-	//weight[2] = 2;
-	//value[2] = 99;
-
-
-	itemCount = 2;
-
-	//int test = MaxValue(cap);
-	
-	Answer answer = MaxValue(cap);
-	
-	printf("");
+	//free the database
+	FreeItemDataBase(database);
 }

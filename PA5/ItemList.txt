@@ -1,3 +1,9 @@
-asdf 1 1
-qwer 2 2
-zxcv 3 3
+pencil 10 1
+pen 21 2
+book 40 7
+phone 200 5
+phone 199 5
+phone 180 5
+phone 25 5
+phone 280 5
+phone 299 5
